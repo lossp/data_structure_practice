@@ -34,6 +34,18 @@ public class SwapNeighbourDoubleLinkedList<E> {
         }
     }
 
+    public boolean contains(E element) {
+        Iterator iterator = getIterator();
+        boolean contains = false;
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(element)) {
+                contains = true;
+                break;
+            }
+        }
+        return contains;
+    }
+
     public void addFirst(E element) {
         if (size == 0) {
             Node newNode = new Node();

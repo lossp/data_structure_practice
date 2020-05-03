@@ -41,6 +41,18 @@ public class SwapNeighbourSingleLinkedList<E> {
         return this.size;
     }
 
+    public boolean contains(E element) {
+        Iterator iterator = getIterator();
+        boolean contains = false;
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(element)) {
+                contains = true;
+                break;
+            }
+        }
+        return contains;
+    }
+
     public void swap(int position) {
         if (position > size) throw new IndexOutOfBoundsException();
         int index = 0;
