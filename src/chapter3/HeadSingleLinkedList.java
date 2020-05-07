@@ -2,6 +2,7 @@ package chapter3;
 
 import java.util.Iterator;
 
+
 /**
  * 假设一个单链表使用一个头节点实现，但是无尾节点，并且假设它只保留对该头节点的引用
  * 编写一个类，包含
@@ -39,6 +40,20 @@ public class HeadSingleLinkedList<E> {
         size++;
     }
 
+    private Node node(int index) {
+        Node current = head;
+        for (int position = 0; position < size; position++) {
+            if(position == index) {
+                break;
+            } else {
+                current = current.next;
+            }
+        }
+        return current;
+    }
+
+
+
     public int getSize() {
         return size;
     }
@@ -49,6 +64,15 @@ public class HeadSingleLinkedList<E> {
         while (iterator.hasNext()) {
             System.out.println("位置为" + index + "的值为 :" + iterator.next());
             index++;
+        }
+    }
+
+    public void printReverseList() {
+        Iterator<E> reverseIterator = getReverseIterator(this.size);
+        int reverseIndex = size - 1;
+        while (reverseIterator.hasNext()) {
+            System.out.println("位置为" + reverseIndex + "的值为 :" + reverseIterator.next());
+            reverseIndex--;
         }
     }
 
@@ -68,7 +92,6 @@ public class HeadSingleLinkedList<E> {
         boolean contains = false;
         if (head == null) {
             addFirst(element);
-            size++;
         } else {
             Node temp = head;
             while (temp != null) {
@@ -80,7 +103,6 @@ public class HeadSingleLinkedList<E> {
             }
             if (!contains) {
                 addFirst(element);
-                size++;
             }
         }
     }
@@ -120,6 +142,30 @@ public class HeadSingleLinkedList<E> {
         return new HeadSingleLinkedListIterator();
     }
 
+    public Iterator<E> getReverseIterator(int size) {
+        return new HeadSingleLinkedListReverseIterator(size);
+    }
+
+    private class HeadSingleLinkedListReverseIterator implements Iterator<E> {
+        private int reverseIndex;
+        public HeadSingleLinkedListReverseIterator(int size) {
+            reverseIndex = size - 1;
+        }
+
+        // 获取最后一个
+        @Override
+        public boolean hasNext() {
+            return reverseIndex != -1;
+        }
+
+        @Override
+        public E next() {
+            Node current = node(reverseIndex);
+            reverseIndex--;
+            return current.element;
+        }
+    }
+
     private class HeadSingleLinkedListIterator implements Iterator<E> {
         private Node current = head;
 
@@ -147,6 +193,9 @@ public class HeadSingleLinkedList<E> {
         headSingleLinkedList.addIfNotExists(6);
         headSingleLinkedList.deleteIfExists(5);
         headSingleLinkedList.printList();
+        System.out.println("=================");
+        headSingleLinkedList.printReverseList();
+
     }
 
 
