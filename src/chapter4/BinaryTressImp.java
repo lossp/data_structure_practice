@@ -119,7 +119,18 @@ public class BinaryTressImp<Key extends Comparable<Key>, Value> {
 
 
     public void deleteMin() {
-        if (root == null) return;
+        root = deleteMin(root);
+    }
+
+    private TreeNode deleteMin(TreeNode node) {
+        // 如果左子树不存，则相当于将原来root节点替换成右侧节点
+        if (node.leftLink == null) return node.rightLink;
+        // 此时需要不断查看左子树，不断寻找最后一个位置元素
+        node.leftLink = deleteMin(node.leftLink);
+        // 重新计算树的大小
+        node.number = node.rightLink.size() + node.leftLink.size() + 1;
+        return node;
+
     }
 
 
@@ -127,6 +138,47 @@ public class BinaryTressImp<Key extends Comparable<Key>, Value> {
 
 
     public void deleteMax() {
+        root = deleteMax(root);
+    }
+
+    // 原理基本和deleteMin一致
+    private TreeNode deleteMax(TreeNode node) {
+        if (node.rightLink == null) return node.leftLink;
+        node.rightLink = deleteMin(node.rightLink);
+        node.number = node.rightLink.size() + node.leftLink.size() + 1;
+        return node;
+    }
+
+
+    /**
+     *  tip:
+     *      1.删除的节点，如果有一个右节点，则因此该节点的后继节点为右子树的最小节点，只有这样才能保证树的有序性
+     *      2.查找到了指定节点，如果存在左子树和右子树，则首先将此节点保存为tmp, 然后查找tmp最小右侧节点，min(tem.rightLink)
+     *        再删除最小右侧节点deleteMin(tmp.rightLink) - 因为要将最小节点移动到原来tmp位置上，
+     *      3.此时最小节点的左节点更换为原来tmp的左节点，完成删除
+     */
+
+    public void delete(Key key) {
+        root = delete(root, key);
+    }
+
+    private TreeNode delete(TreeNode node, Key key) {
+        if (node == null) return null;
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) return delete(node.rightLink, key);
+        if (cmp < 0) return delete(node.leftLink, key);
+        else {
+            if (node.rightLink == null) return node.leftLink;
+            if (node.leftLink == null) return node.rightLink;
+            else {
+                TreeNode tmp = node;
+                node = min(tmp.rightLink);
+                node.rightLink = deleteMin(tmp.rightLink);
+                node.leftLink = tmp.leftLink;
+            }
+            node.number = node.leftLink.size() + node.rightLink.size() + 1;
+            return node;
+        }
 
     }
 
