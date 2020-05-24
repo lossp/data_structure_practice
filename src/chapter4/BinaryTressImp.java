@@ -179,7 +179,27 @@ public class BinaryTressImp<Key extends Comparable<Key>, Value> {
             node.number = node.leftLink.size() + node.rightLink.size() + 1;
             return node;
         }
+    }
 
+    /**
+     *  tip:
+     *      1. 二叉树插入的思想还是依次和节点进行比较，对左侧或者右侧子树依次进行迭代
+     */
+
+    public TreeNode insert(Key key, Value value) {
+        return insert(root, new TreeNode(key, value, 0));
+    }
+
+    private TreeNode insert(TreeNode root,TreeNode insertOne) {
+        // 如果根节点不存，则直接将插入节点更新为根节点
+        if (root == null) return insertOne;
+        int cmp = insertOne.key.compareTo(root.key);
+        if (cmp > 0) {
+            root.rightLink = insert(root.rightLink,insertOne);
+        } else if (cmp < 0) {
+            root.leftLink = insert(root.leftLink, insertOne);
+        }
+        else return insertOne;
     }
 
 
