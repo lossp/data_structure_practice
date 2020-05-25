@@ -199,7 +199,7 @@ public class BinaryTressImp<Key extends Comparable<Key>, Value> {
         } else if (cmp < 0) {
             root.leftLink = insert(root.leftLink, insertOne);
         }
-        else return insertOne;
+        return insertOne;
     }
 
 
