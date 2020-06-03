@@ -1,15 +1,17 @@
 package chapter4.algs4.binary_search_tree;
 
 
+import java.math.BigDecimal;
+
 /**
  * 3.2.7 Add to BST a recursive method avgCompares() that computes the average number of compares
  * required by a random search hit in a given BST (the internal path length of the tree divided by its size, plus one).
  * Develop two implementations: a recursive method (which takes linear time and space proportional to the height),
  * and a method like size() that adds a field to each node in the tree (and takes linear space and constant time per query).
  */
-public class BinaryTreeAveComparesImp<Key extends Comparable<Key>, Value> {
+public class BinaryTreeAvgComparesImp<Key extends Comparable<Key>, Value> {
     private Node root;
-    public BinaryTreeAveComparesImp() {
+    public BinaryTreeAvgComparesImp() {
         this.root = null;
     }
 
@@ -35,21 +37,20 @@ public class BinaryTreeAveComparesImp<Key extends Comparable<Key>, Value> {
         return node.size;
     }
 
-    public int avgCompares(Key key) {
-        return avgCompares(root, key);
+    public BigDecimal avgCompares() {
+        BigDecimal sum = new BigDecimal(totalCompares());
+        BigDecimal sizeNumber = new BigDecimal(size());
+        return sum.divide(sizeNumber);
     }
 
-    private int avgCompares(Node node, Key key) {
-        int times = 0;
-        if (node == null) return times;
-        int cmp = key.compareTo(node.key);
-        if (cmp > 0) {
-            times = avgCompares(node.right, key);
-        }
-        if (cmp < 0) {
-            times = avgCompares(node.left, key);
-        }
-        return ++times;
+
+    public int totalCompares() {
+        return totalCompares(root, 1);
+    }
+
+    private int totalCompares(Node node, int depth) {
+        if (node == null) return 0;
+        return totalCompares(node.right, depth + 1) + totalCompares(node.left, depth + 1) + depth;
     }
 
     public void insert(Key key, Value value) {
@@ -95,14 +96,14 @@ public class BinaryTreeAveComparesImp<Key extends Comparable<Key>, Value> {
     }
 
     public static void main(String[] args) {
-        BinaryTreeAveComparesImp binaryTreeAveComparesImp = new BinaryTreeAveComparesImp();
-        binaryTreeAveComparesImp.insert(1, "firstOne");
-        binaryTreeAveComparesImp.insert(2, "secondOne");
-        binaryTreeAveComparesImp.insert(3, "thirdOne");
-        binaryTreeAveComparesImp.insert(0, "the shit");
-        binaryTreeAveComparesImp.printTreeMap();
-        System.out.println("the size = " + binaryTreeAveComparesImp.size());
-        System.out.println("the hits = " + binaryTreeAveComparesImp.avgCompares(2));
+        BinaryTreeAvgComparesImp binaryTreeAvgComparesImp = new BinaryTreeAvgComparesImp();
+        binaryTreeAvgComparesImp.insert(1, "firstOne");
+        binaryTreeAvgComparesImp.insert(2, "secondOne");
+        binaryTreeAvgComparesImp.insert(3, "thirdOne");
+        binaryTreeAvgComparesImp.insert(0, "the shit");
+        binaryTreeAvgComparesImp.printTreeMap();
+        System.out.println("the size = " + binaryTreeAvgComparesImp.size());
+        System.out.println("the hits = " + binaryTreeAvgComparesImp.avgCompares());
     }
 
 }
