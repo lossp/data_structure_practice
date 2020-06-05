@@ -3,6 +3,9 @@ package chapter4.algs4.binary_search_tree;
 
 /**
  * 3.2.13 Give non-recursive implementations of get() and put() for BST.
+ *
+ * 3.2.14 Give non-recursive implementations of min(), max(), floor(), ceiling(),
+ * rank(), and select().
  */
 public class NonerecursiveImp<Key extends Comparable<Key>, Value> {
     private Node root;
@@ -62,6 +65,59 @@ public class NonerecursiveImp<Key extends Comparable<Key>, Value> {
         }
     }
 
+    public Key min() {
+        Node tmp = root;
+        while (tmp != null) {
+            if (tmp.left == null) return tmp.key;
+            tmp = tmp.left;
+        }
+        return null;
+    }
+
+    public Key max() {
+        Node tmp = root;
+        while (tmp != null) {
+            if (tmp.right == null) return tmp.key;
+            tmp = tmp.right;
+        }
+        return null;
+    }
+
+    public Key floor(Key key) {
+        Node tmp = root;
+        while (tmp != null) {
+            int cmp = key.compareTo(tmp.key);
+            if (cmp == 0) return tmp.key;
+            if (cmp < 0) {
+                if (tmp.left == null) return tmp.key;
+                tmp = tmp.left;
+            }
+            if (cmp > 0) {
+                if (tmp.right == null) return tmp.key;
+                tmp = tmp.right;
+            }
+
+        }
+        return null;
+    }
+
+    public Key ceiling(Key key) {
+        Node tmp = root;
+        while (tmp != null) {
+            int cmp = key.compareTo(tmp.key);
+            if (cmp == 0) return tmp.key;
+            if (cmp > 0) {
+                if (tmp.left == null) return tmp.key;
+                tmp = tmp.left;
+            }
+            if (cmp < 0) {
+                if (tmp.right == null) return tmp.key;
+                tmp = tmp.right;
+            }
+        }
+        return null;
+    }
+
     public void printTreeMap() {
         StringBuilder stringBuilder = new StringBuilder();
         printTreeMap(stringBuilder,"", "", root);
@@ -91,13 +147,16 @@ public class NonerecursiveImp<Key extends Comparable<Key>, Value> {
     public static void main(String[] args) {
         NonerecursiveImp nonerecursiveImp = new NonerecursiveImp();
         nonerecursiveImp.put(2, "second");
-        nonerecursiveImp.put(3, "third");
+//        nonerecursiveImp.put(3, "third");
         nonerecursiveImp.put(1, "first");
         nonerecursiveImp.put(4, "forth");
         nonerecursiveImp.put(5, "fifth");
         nonerecursiveImp.put(0, "zero");
         nonerecursiveImp.put(2, "第二个");
-
+        System.out.println("最小的min() = " + nonerecursiveImp.min());
+        System.out.println("最大的max() = " + nonerecursiveImp.max());
+        System.out.println("floor(3) = " + nonerecursiveImp.floor(3));
+        System.out.println("ceiling(3) = " + nonerecursiveImp.ceiling(3));
         nonerecursiveImp.printTreeMap();
     }
 }
