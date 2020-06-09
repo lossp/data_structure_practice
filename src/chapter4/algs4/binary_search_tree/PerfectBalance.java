@@ -13,6 +13,8 @@ import javax.annotation.processing.SupportedSourceVersion;
  * tips:
  * 在没有涉及到相关的二叉树左右翻转情况的时候，需要首先定义一个数组(已经排好序了)，取中间部分的值，这样一来，最坏情况也就是
  * 两个子树的高度差1，可以构造出完美平衡的二叉树
+ *
+ *  // TODO 此题目有误 应该中间对分之后，再在独立的二者中独立对分，才能达到完美平衡。
  */
 public class PerfectBalance<Key extends Comparable<Key>, Value> {
     private Node root;
