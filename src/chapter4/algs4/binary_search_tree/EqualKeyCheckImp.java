@@ -1,5 +1,7 @@
 package chapter4.algs4.binary_search_tree;
 
+import java.util.HashSet;
+
 /**
  * 3.2.31 Equal key check. Write a method hasNoDuplicates()
  * that takes a Node as argument and returns true if there are
@@ -9,6 +11,8 @@ package chapter4.algs4.binary_search_tree;
  *
  * Question: 1.已经完美平衡的二叉树，为何会出现两个相同的Key值？
  *           2.相同的Key值，如何分配在子树中？
+ *
+ *           只能指定root.left = 2, root.left.left = 2类似这种形式才能模拟该问题
  */
 public class EqualKeyCheckImp<Key extends Comparable<Key>, Value> {
     private Node root;
@@ -85,29 +89,59 @@ public class EqualKeyCheckImp<Key extends Comparable<Key>, Value> {
         }
     }
 
-    public boolean hasNoDuplicates(Key key) {
-        // TODO
-//        Node node = hasNoDuplicates(root, new Node(key, null));
-        return false;
+
+    // 创建错误的二叉树
+    public void fakePut(Key key, Value value) {
+        root = fakePut(root, new Node(key, value));
     }
 
-    private Node hasNoDuplicates(Node root, Node node) {
-        // TODO
-        return null;
-//        if (node.sameKey(root)) return root;
-//        int cmp = node.key.compareTo(root.key);
+    private Node fakePut(Node root, Node node) {
+        if (root == null) {
+            node.size++;
+            return node;
+        }
 
+        int cmp = node.key.compareTo(root.key);
+        if (cmp > 0) {
+            root.right = fakePut(root.right, node);
+        }
+        if (cmp < 0) {
+            root.left = fakePut(root.left, node);
+        }
+        if (cmp == 0) {
+            root.left = node;
+        }
+        root.size++;
+        return root;
+
+    }
+
+    public boolean hasNoDuplicates(Node node) {
+        // 用hashSet来作为标尺，检查唯一性，这样就不用每次去遍历整个树
+        HashSet<Key> hashSet = new HashSet<>();
+        return hasNoDuplicates(root, hashSet);
+    }
+
+    private boolean hasNoDuplicates(Node root, HashSet set) {
+        if (root == null) return true;
+        System.out.println("Node.key = " + root.key);
+        if (set.contains(root.key)) {
+            System.out.println("此时的 root.key = " + root.key);
+            return false;
+        }
+        set.add(root.key);
+        if (!hasNoDuplicates(root.left, set)) return false;
+        if (!hasNoDuplicates(root.right, set)) return false;
+        return true;
     }
 
     public static void main(String[] args) {
         EqualKeyCheckImp equalKeyCheckImp = new EqualKeyCheckImp();
-        equalKeyCheckImp.put(5, "fifth");
-        equalKeyCheckImp.put(4, "forth");
-        equalKeyCheckImp.put(8, "eighth");
-        equalKeyCheckImp.put(9, "ninth");
-        equalKeyCheckImp.put(10, "tenth");
-        equalKeyCheckImp.put(6, "sixth");
+        equalKeyCheckImp.put(1, "first");
+        equalKeyCheckImp.fakePut(1, "fakeFirst");
+        equalKeyCheckImp.fakePut(2, "second");
         equalKeyCheckImp.printTreeMap();
+        System.out.println("没有重复的: " + equalKeyCheckImp.hasNoDuplicates(equalKeyCheckImp.root));
 
     }
 
