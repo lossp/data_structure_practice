@@ -5,6 +5,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 
 public class CopyHashMap<K, V> extends AbstractMap<K, V> implements Cloneable, Serializable {
 
@@ -64,24 +65,29 @@ public class CopyHashMap<K, V> extends AbstractMap<K, V> implements Cloneable, S
         // 即发生Hash Collision
         else {
             Node<K, V> e; K k;
-            if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k)))) {
-                e = p;
-            } else if (p instanceof TreeNode) {
-                // TODO
-            } else {
-                for (int binCount = 0 ;; ++binCount) {
-                    if ((e = p.next) == null) {
-                        p.next = newNode(hash, key, value, null);
-                        // TREEIFY_THRESHOLD是指？
-                        if (binCount >= TREEIFY_THRESHOLD - 1)
-                            // 这个函数作用是？
-                            treeifyBin(tab, hash);
-                        break;
-                    }
-                    if (e.hash == hash && )
-                }
-            }
+//            if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k)))) {
+//                e = p;
+//            } else if (p instanceof TreeNode) {
+//                // TODO
+//            } else {
+//                for (int binCount = 0 ;; ++binCount) {
+//                    if ((e = p.next) == null) {
+//                        p.next = newNode(hash, key, value, null);
+//                        // TREEIFY_THRESHOLD是指？
+//                        if (binCount >= TREEIFY_THRESHOLD - 1)
+//                            // 这个函数作用是？
+//                            treeifyBin(tab, hash);
+//                        break;
+//                    }
+//                    if (e.hash == hash && )
+//                }
+//            }
         }
+        return null;
+    }
+
+    public Node<K, V>[] resize() {
+        return null;
     }
 
     Node<K, V> newNode(int hash, K key, V value, Node<K, V> next) {
